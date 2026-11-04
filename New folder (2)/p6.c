@@ -1,43 +1,47 @@
+#include<stdio.h>
 
-#include <stdio.h>
+#define MAX 10
 
-struct Router {
-    int distance[10], nextHop[10];
-} rt[10];
+int adjacencyMatrix[MAX][MAX];
+int numNodes;
+
+// Function to display adjacent nodes of a given node
+void displayAdjacentNodes(int rootNode) {
+    int i;
+
+    printf("\nAdjacent nodes of node %d:\n", rootNode);
+
+    for (i = 1; i <= numNodes; i++) {
+        if (adjacencyMatrix[rootNode][i] == 1 || adjacencyMatrix[i][rootNode] == 1) {
+            printf("%d\t", i);
+        }
+    }
+
+    printf("\n");
+}
 
 int main() {
-    int cost[10][10], n, i, j, k, update;
+    int i, j, rootNode;
 
+    // Input number of nodes
     printf("Enter number of nodes: ");
-    scanf("%d", &n);
+    scanf("%d", &numNodes);
 
-    printf("Enter cost matrix:\n");
-    for(i=0;i<n;i++)
-        for(j=0;j<n;j++) {
-            scanf("%d", &cost[i][j]);
-            rt[i].distance[j] = cost[i][j];
-            rt[i].nextHop[j] = j;
+    // Input the adjacency matrix
+    printf("Enter adjacency matrix:\n");
+    for (i = 1; i <= numNodes; i++) {
+        for (j = 1; j <= numNodes; j++) {
+            printf("Is there a connection from node %d to node %d (1=yes, 0=no): ", i, j);
+            scanf("%d", &adjacencyMatrix[i][j]);
         }
-
-    do {
-        update = 0;
-        for(i=0;i<n;i++)
-            for(j=0;j<n;j++)
-                for(k=0;k<n;k++)
-                    if(rt[i].distance[j] > cost[i][k] + rt[k].distance[j]) {
-                        rt[i].distance[j] = cost[i][k] + rt[k].distance[j];
-                        rt[i].nextHop[j] = k;
-                        update = 1;
-                    }
-    } while(update);
-
-    for(i=0;i<n;i++) {
-        printf("\nRouting Table of Router %d\n", i+1);
-        printf("Destination\tNext Hop\tDistance\n");
-        for(j=0;j<n;j++)
-            printf("%d\t\t%d\t\t%d\n", j+1,
-                   rt[i].nextHop[j]+1, rt[i].distance[j]);
     }
+
+    // Input the root node
+    printf("Enter root node (1 to %d): ", numNodes);
+    scanf("%d", &rootNode);
+
+    // Display adjacent nodes
+    displayAdjacentNodes(rootNode);
 
     return 0;
 }
